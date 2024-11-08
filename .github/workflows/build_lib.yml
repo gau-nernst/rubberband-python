@@ -27,7 +27,7 @@ jobs:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_linux
         path: |
           rubberband
-          build
+          build/librubberband*
 
   macos:
     runs-on: macos-latest
@@ -46,7 +46,7 @@ jobs:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_macos
         path: |
           rubberband
-          build
+          build/librubberband*
 
   windows:
     runs-on: windows-latest
@@ -69,4 +69,4 @@ jobs:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_windows
         path: |
           rubberband
-          build
+          build/librubberband*
