@@ -1,7 +1,7 @@
 project('rubberband-python', 'c')
 
-rubberband_dep = dependency('rubberband', static: true)
-apple_dep = dependency('appleframeworks', modules : 'Accelerate', required: false)  # for vDSP in rubberband
+rubberband_dep = dependency('rubberband', default_options: ['jni=disabled'], static: true)
+apple_dep = dependency('appleframeworks', modules : 'Accelerate', required: false)  # vDSP
 
 py = import('python').find_installation(pure: false)
 py.extension_module(
