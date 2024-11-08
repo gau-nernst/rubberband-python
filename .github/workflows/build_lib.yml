@@ -7,8 +7,47 @@ on:
 env:
   RUBBERBAND_REPO: breakfastquay/rubberband
   RUBBERBAND_VERSION: 'v4.0.0'
+  RUBBERBAND_FLAGS: -Djni=disabled -Dcmdline=disabled -Dtests=disabled
 
 jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ env.RUBBERBAND_REPO }}
+        ref: ${{ env.RUBBERBAND_VERSION }}
+    - run: apt install meson
+    - name: Build
+      run: |
+        meson setup build ${{ env.RUBBERBAND_FLAGS }}
+        ninja -C build
+    - name: Prepare artifact
+      run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_linux.tar.gz rubberband build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rubberband_${{ env.RUBBERBAND_VERSION }}_linux
+        path: rubberband_${{ env.RUBBERBAND_VERSION }}_linux.tar.gz
+
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ env.RUBBERBAND_REPO }}
+        ref: ${{ env.RUBBERBAND_VERSION }}
+    - run: brew install meson ninja
+    - name: Build
+      run: |
+        meson setup build ${{ env.RUBBERBAND_FLAGS }}
+        ninja -C build
+    - name: Prepare artifact
+      run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_macos.tar.gz rubberband build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rubberband_${{ env.RUBBERBAND_VERSION }}_macos
+        path: rubberband_${{ env.RUBBERBAND_VERSION }}_macos.tar.gz
+
   windows:
     runs-on: windows-latest
     steps:
@@ -21,10 +60,12 @@ jobs:
       with:
         python-version: '3.10'
     - run: pip install meson ninja
-    - run: |
-        meson setup build
+    - name: Build
+      run: |
+        meson setup build ${{ env.RUBBERBAND_FLAGS }}
         ninja -C build
-    - run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_windows.tar.gz rubberband build
+    - name: Prepare artifact
+      run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_windows.tar.gz rubberband build
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_windows
