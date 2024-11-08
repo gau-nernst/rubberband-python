@@ -1,0 +1,72 @@
+name: Build lib
+on:
+  push:
+    paths:
+      - .github/workflows/build_lib.yml
+
+env:
+  RUBBERBAND_REPO: breakfastquay/rubberband
+  RUBBERBAND_VERSION: 'v4.0.0'
+  RUBBERBAND_FLAGS: -Djni=disabled -Dcmdline=disabled -Dtests=disabled
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ env.RUBBERBAND_REPO }}
+        ref: ${{ env.RUBBERBAND_VERSION }}
+    - run: sudo apt update && sudo apt install -y meson
+    - name: Build
+      run: |
+        meson setup build ${{ env.RUBBERBAND_FLAGS }}
+        ninja -C build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rubberband_${{ env.RUBBERBAND_VERSION }}_linux
+        path: |
+          rubberband
+          build/librubberband*
+
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ env.RUBBERBAND_REPO }}
+        ref: ${{ env.RUBBERBAND_VERSION }}
+    - run: brew install meson ninja
+    - name: Build
+      run: |
+        meson setup build ${{ env.RUBBERBAND_FLAGS }}
+        ninja -C build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rubberband_${{ env.RUBBERBAND_VERSION }}_macos
+        path: |
+          rubberband
+          build/librubberband*
+
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ env.RUBBERBAND_REPO }}
+        ref: ${{ env.RUBBERBAND_VERSION }}
+    - uses: microsoft/setup-msbuild@v2
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - run: pip install meson ninja
+    - name: Build
+      run: |
+        meson setup build ${{ env.RUBBERBAND_FLAGS }}
+        ninja -C build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rubberband_${{ env.RUBBERBAND_VERSION }}_windows
+        path: |
+          rubberband
+          build/librubberband*
