@@ -22,12 +22,10 @@ jobs:
       run: |
         meson setup build ${{ env.RUBBERBAND_FLAGS }}
         ninja -C build
-    - name: Prepare artifact
-      run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_linux.tar.gz rubberband build
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_linux
-        path: rubberband_${{ env.RUBBERBAND_VERSION }}_linux.tar.gz
+        path: rubberband build
 
   macos:
     runs-on: macos-latest
@@ -41,12 +39,10 @@ jobs:
       run: |
         meson setup build ${{ env.RUBBERBAND_FLAGS }}
         ninja -C build
-    - name: Prepare artifact
-      run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_macos.tar.gz rubberband build
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_macos
-        path: rubberband_${{ env.RUBBERBAND_VERSION }}_macos.tar.gz
+        path: rubberband build
 
   windows:
     runs-on: windows-latest
@@ -64,9 +60,7 @@ jobs:
       run: |
         meson setup build ${{ env.RUBBERBAND_FLAGS }}
         ninja -C build
-    - name: Prepare artifact
-      run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_windows.tar.gz rubberband build
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_windows
-        path: rubberband_${{ env.RUBBERBAND_VERSION }}_windows.tar.gz
+        path: rubberband build
