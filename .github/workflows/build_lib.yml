@@ -25,7 +25,9 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_linux
-        path: rubberband/ build/
+        path: |
+          rubberband
+          build
 
   macos:
     runs-on: macos-latest
@@ -42,7 +44,9 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_macos
-        path: rubberband/ build/
+        path: |
+          rubberband
+          build
 
   windows:
     runs-on: windows-latest
@@ -63,4 +67,6 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_windows
-        path: rubberband/ build/
+        path: |
+          rubberband
+          build
