@@ -1,8 +1,5 @@
 name: Build
-on:
-  push:
-    paths:
-      - .github/workflows/build.yml
+on: push
 
 jobs:
   linux:
