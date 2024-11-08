@@ -25,7 +25,7 @@ jobs:
         meson setup build
         ninja -C build
     - run: tar -czvf rubberband_${{ env.RUBBERBAND_VERSION }}_windows.tar.gz rubberband build
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: rubberband_${{ env.RUBBERBAND_VERSION }}_windows
         path: rubberband_${{ env.RUBBERBAND_VERSION }}_windows.tar.gz
