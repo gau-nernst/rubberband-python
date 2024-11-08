@@ -1,0 +1,10 @@
+[build-system]
+build-backend = 'mesonpy'
+requires = ['meson-python']
+
+[project]
+name = 'rubberband-python'
+version = '0.0.1'
+
+[tool.meson-python.args]
+install = ['--tags=runtime,python-runtime']
