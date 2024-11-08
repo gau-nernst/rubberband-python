@@ -17,7 +17,7 @@ jobs:
       with:
         repository: ${{ env.RUBBERBAND_REPO }}
         ref: ${{ env.RUBBERBAND_VERSION }}
-    - run: apt install meson
+    - run: sudo apt update && sudo apt install -y meson
     - name: Build
       run: |
         meson setup build ${{ env.RUBBERBAND_FLAGS }}
