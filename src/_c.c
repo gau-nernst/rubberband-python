@@ -3,21 +3,23 @@
 #include <stdio.h>
 #include <rubberband/rubberband-c.h>
 
-static PyObject *py_time_stretch(PyObject *self, PyObject *args) {
+static PyObject *py_rubberband(PyObject *self, PyObject *args) {
   Py_buffer in_buf;
   int num_channels;
   int sample_rate;
-  double factor;
+  double time_ratio;
+  double pitch_scale;
   Py_buffer out_buf;
 
   if (
     !PyArg_ParseTuple(
       args,
-      "y*iidy*",
+      "y*iiddy*",
       &in_buf,
       &num_channels,
       &sample_rate, 
-      &factor,
+      &time_ratio,
+      &pitch_scale,
       &out_buf
     )
   )
@@ -29,7 +31,7 @@ static PyObject *py_time_stretch(PyObject *self, PyObject *args) {
   const int num_out_frames = out_buf.len / sizeof(float) / num_channels;
 
   RubberBandOptions options = RubberBandOptionProcessOffline;
-  RubberBandState state = rubberband_new(sample_rate, num_channels, options, factor, 1.0);
+  RubberBandState state = rubberband_new(sample_rate, num_channels, options, time_ratio, pitch_scale);
 
   const int bsize = 1 << 14;
   rubberband_set_expected_input_duration(state, num_in_frames);
@@ -77,7 +79,7 @@ static PyObject *py_time_stretch(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef methods[] = {
-  {"time_stretch", py_time_stretch, METH_VARARGS, NULL},
+  {"rubberband", py_rubberband, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL},
 };
 
