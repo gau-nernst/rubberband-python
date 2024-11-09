@@ -9,17 +9,20 @@ static PyObject *py_rubberband(PyObject *self, PyObject *args) {
   int sample_rate;
   double time_ratio;
   double pitch_scale;
+  int fast;
   Py_buffer out_buf;
 
+  // see https://docs.python.org/3/c-api/arg.html
   if (
     !PyArg_ParseTuple(
       args,
-      "y*iiddy*",
+      "y*iiddpy*",
       &in_buf,
       &num_channels,
       &sample_rate, 
       &time_ratio,
       &pitch_scale,
+      &fast,
       &out_buf
     )
   )
@@ -30,7 +33,18 @@ static PyObject *py_rubberband(PyObject *self, PyObject *args) {
   const int num_in_frames = in_buf.len / sizeof(float) / num_channels;
   const int num_out_frames = out_buf.len / sizeof(float) / num_channels;
 
-  RubberBandOptions options = RubberBandOptionProcessOffline;
+  // set options according to https://breakfastquay.com/rubberband/integration.html
+  RubberBandOptions options = RubberBandOptionProcessOffline
+                            | RubberBandOptionEngineFiner
+                            | RubberBandOptionChannelsTogether;
+  if (!fast) {  // higher quality, slower
+    if (pitch_scale != 1.0)
+      options |= RubberBandOptionPitchHighQuality
+               | RubberBandOptionFormantPreserved;
+  }
+  else {  // lower quality, faster
+    options |= RubberBandOptionWindowShort;
+  }
   RubberBandState state = rubberband_new(sample_rate, num_channels, options, time_ratio, pitch_scale);
 
   const int bsize = 1 << 14;
