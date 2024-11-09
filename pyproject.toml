@@ -5,8 +5,22 @@ requires = ['meson-python']
 [project]
 name = 'rubberband-python'
 version = '0.0.1'
+dependencies = [
+  "numpy",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
 
 [tool.meson-python.args]
 install = ['--tags=runtime,python-runtime']
 setup = ['--vsenv']
 compile = ['-v']
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["rubberband_python"]
