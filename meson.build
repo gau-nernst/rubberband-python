@@ -1,2 +1,2 @@
 project('rubberband-python', 'c')
-subdir('rubberband_python')
+subdir('src')
