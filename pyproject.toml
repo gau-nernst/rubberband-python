@@ -9,3 +9,4 @@ version = '0.0.1'
 [tool.meson-python.args]
 install = ['--tags=runtime,python-runtime']
 setup = ['--vsenv']
+compile = ['-v']
