@@ -39,8 +39,8 @@ static PyObject *py_time_stretch(PyObject *self, PyObject *args) {
   float **in_channels = malloc(sizeof(float *) * num_channels);
   float **out_channels = malloc(sizeof(float *) * num_channels);
   for (int i = 0; i < num_channels; i++) {
-    in_channels[i] = in_buf.buf + i * num_in_frames;
-    out_channels[i] = out_buf.buf + i * num_out_frames;
+    in_channels[i] = (float *)in_buf.buf + i * num_in_frames;
+    out_channels[i] = (float *)out_buf.buf + i * num_out_frames;
   }
 
   rubberband_study(state, in_channels, num_in_frames, 1);
