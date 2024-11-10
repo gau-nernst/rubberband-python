@@ -18,6 +18,21 @@ def _rubberband(
     return out
 
 
+# seems like slower than offline mode
+def _rubberband_realtime(
+    audio: np.ndarray,
+    sample_rate: int,
+    time_ratio: float,
+    pitch_scale: float,
+    fast: bool,
+) -> np.ndarray:
+    num_channels, num_frames = audio.shape
+    # TODO: check if real-time mode gives the exact duration
+    out = np.empty((num_channels, math.ceil(num_frames * time_ratio)), dtype=audio.dtype)
+    _c.rubberband_realtime(audio, num_channels, sample_rate, time_ratio, pitch_scale, fast, out)
+    return out
+
+
 def rubberband(
     audio: np.ndarray,
     sample_rate: int,
